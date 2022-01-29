@@ -63,7 +63,6 @@ export default function Index() {
         display: "flex",
         flexDirection: "column",
         height: "100vh",
-        // width: "100vh",
         justifyContent: "space-between",
       }}
     >
