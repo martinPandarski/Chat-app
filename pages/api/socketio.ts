@@ -17,7 +17,11 @@ export default async (req: NextApiRequest, res: NextResponseServerIO) => {
     const io = new ServerIO(httpServer, {
       cors: {
         origin: "*",
+        methods: ["GET", "POST"],
+        allowedHeaders: ["Content-Type"],
+        credentials: true,
       },
+
       path: "/api/socketio",
     });
     console.log(io);
