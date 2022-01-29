@@ -23,6 +23,8 @@ export default function Index() {
       path: "/api/socketio",
     });
 
+    console.log(socket);
+
     socket.on("connect", () => {
       console.log("connected", socket.id);
       setIsConnected(true);
