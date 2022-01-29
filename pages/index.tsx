@@ -46,9 +46,9 @@ export default function Index() {
 
       const response = await fetch("/api/chat", {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
+          "Allow-Control-Allow-Origin": "*",
         },
         body: JSON.stringify(messageToSend),
       });

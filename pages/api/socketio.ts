@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextResponseServerIO) => {
       cors: {
         origin: "*",
         methods: ["GET", "POST"],
-        allowedHeaders: ["Content-Type"],
+        allowedHeaders: ["Content-Type", "Allow-Control-Allow-Origin"],
         credentials: true,
       },
 
