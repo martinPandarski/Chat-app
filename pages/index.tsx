@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import SocketIOClient from "socket.io-client";
+import { io } from "socket.io-client";
 import { AppBar, Button, Paper, TextField } from "@mui/material";
 import { AnimatePresence, motion } from "framer-motion";
 
@@ -19,7 +19,7 @@ export default function Index() {
   const [message, setMessage] = useState<string>("");
 
   useEffect((): any => {
-    const socket = SocketIOClient(process.env.NEXT_PUBLIC_API_URL, {
+    const socket = io(process.env.NEXT_PUBLIC_API_URL, {
       path: "/api/socketio",
     });
 
@@ -39,9 +39,9 @@ export default function Index() {
 
   const sendMessage = async () => {
     if (message) {
-      const messageToSend = {
+      const messageToSend: IMessage = {
         user: currentUser,
-        message,
+        message: message,
       };
 
       const response = await fetch("/api/chat", {
