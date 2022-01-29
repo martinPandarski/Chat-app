@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import SocketIOClient from "socket.io-client";
-import tw from "twin.macro";
+import { AppBar, Button, Paper, TextField } from "@mui/material";
+import { AnimatePresence, motion } from "framer-motion";
 
 interface IMessage {
   user: string;
@@ -48,8 +49,94 @@ export default function Index() {
         },
         body: JSON.stringify(messageToSend),
       });
+
+      if (response.ok) {
+        setMessage("");
+      }
     }
+    inputRef?.current?.focus();
   };
 
-  return <div>{process.env.NEXT_PUBLIC_API_URL}</div>;
+  return (
+    <Paper
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        // width: "100vh",
+        justifyContent: "space-between",
+      }}
+    >
+      <AppBar
+        position="sticky"
+        style={{
+          height: "100px",
+          textAlign: "center",
+          justifyContent: "center",
+        }}
+      >
+        Chat
+      </AppBar>
+      <div
+        className="chat-container"
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          overflow: "auto",
+        }}
+      >
+        {chat.length ? (
+          <AnimatePresence initial={false}>
+            {chat.map((message, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 100 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, transition: { duration: 0.15 } }}
+              >
+                <span
+                  style={
+                    message?.user === currentUser
+                      ? { color: "red" }
+                      : { color: "black" }
+                  }
+                >
+                  {message?.user === currentUser ? "Me" : message?.user}
+                </span>
+                : {message?.message}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        ) : (
+          <p>no Messages</p>
+        )}
+      </div>
+      <div style={{ display: "flex", alignItems: "center" }}>
+        <TextField
+          fullWidth
+          ref={inputRef}
+          type="text"
+          value={message}
+          placeholder={isConnected ? "Напиши нещо бре" : "Connecting..."}
+          disabled={!isConnected}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              sendMessage();
+            }
+          }}
+          onChange={(e) => {
+            setMessage(e.target.value);
+          }}
+        />
+        <Button
+          variant={"outlined"}
+          onClick={sendMessage}
+          disabled={!isConnected}
+        >
+          Цък
+        </Button>
+      </div>
+    </Paper>
+  );
 }
